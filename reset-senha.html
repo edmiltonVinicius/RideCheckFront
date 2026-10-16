@@ -1,11 +1,119 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <!-- O token vai na URL: não enviar o endereço como referência para outros sites -->
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="light dark">
+  <title>Redefinir senha · RideCheck</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="redefinir-senha.css">
 </head>
 <body>
-    <h1>RESET PASSWORD</h1>
+
+  <main class="shell">
+
+    <header class="brand" aria-label="RideCheck">
+      <svg width="40" height="40" viewBox="0 0 104 104" aria-hidden="true" focusable="false">
+        <rect width="104" height="104" rx="26" fill="var(--brand)"/>
+        <path d="M30 54 L46 70 L76 38" fill="none" stroke="var(--brand-on)" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M30 86 L74 86" stroke="var(--brand-on)" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 9"/>
+      </svg>
+      <span class="wordmark">Ride<span class="wordmark-accent">Check</span></span>
+    </header>
+
+    <section class="card" aria-live="polite">
+
+      <!-- Estado 1: validando o token -->
+      <div class="state" id="state-loading">
+        <h1 class="title">Verificando seu link</h1>
+        <p class="text">Um instante, estamos conferindo se o link ainda é válido.</p>
+        <div class="spinner" aria-hidden="true"></div>
+      </div>
+
+      <!-- Estado 2: token inválido, expirado ou já usado -->
+      <div class="state" id="state-invalid" hidden>
+        <div class="icon-badge icon-badge--negative" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+        </div>
+        <h1 class="title">Link inválido ou expirado</h1>
+        <p class="text">Este link já foi usado, expirou ou não é válido. Solicite um novo para redefinir sua senha.</p>
+      </div>
+
+      <!-- Estado 3: formulário de nova senha -->
+      <form class="state" id="state-form" hidden novalidate>
+        <h1 class="title">Crie uma nova senha</h1>
+        <p class="text">Código verificado! Agora defina sua nova senha.</p>
+
+        <div class="field">
+          <label class="label" for="password">Nova senha</label>
+          <div class="input-wrap">
+            <input class="input" id="password" name="password" type="password" autocomplete="new-password" placeholder="Mínimo 8 caracteres" required aria-describedby="password-error">
+            <button class="toggle" type="button" id="toggle-password" aria-controls="password" aria-pressed="false" aria-label="Mostrar senha">
+              <svg class="eye-icon" id="eye-password" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-icon eye-off" id="eye-off-password" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-6.4 0-10-7-10-7a18.2 18.2 0 0 1 2.94-3.94M9.88 9.88A3 3 0 0 0 12 15a3 3 0 0 0 2.12-5.12M6.53 6.53C4.12 8.07 2 12 2 12s3.6 7 10 7a10.9 10.9 0 0 0 5.47-1.53M22 22 2 2"/></svg>
+            </button>
+          </div>
+          <div class="strength-bar" id="strength-bar" aria-hidden="true">
+            <span class="strength-seg" id="seg-1"></span>
+            <span class="strength-seg" id="seg-2"></span>
+            <span class="strength-seg" id="seg-3"></span>
+            <span class="strength-seg" id="seg-4"></span>
+          </div>
+          <ul class="req-list" id="req-list">
+            <li class="req-item" id="req-length" data-met="false">
+              <span class="req-icon" aria-hidden="true"></span>
+              <span>Mínimo 8 caracteres</span>
+            </li>
+            <li class="req-item" id="req-number" data-met="false">
+              <span class="req-icon" aria-hidden="true"></span>
+              <span>Pelo menos 1 número</span>
+            </li>
+            <li class="req-item" id="req-special" data-met="false">
+              <span class="req-icon" aria-hidden="true"></span>
+              <span>Pelo menos 1 caractere especial</span>
+            </li>
+          </ul>
+          <p class="error" id="password-error" hidden></p>
+        </div>
+
+        <div class="field">
+          <label class="label" for="confirm">Confirmar senha</label>
+          <div class="input-wrap">
+            <input class="input" id="confirm" name="confirm" type="password" autocomplete="new-password" placeholder="Repita a nova senha" required aria-describedby="confirm-error">
+            <button class="toggle" type="button" id="toggle-confirm" aria-controls="confirm" aria-pressed="false" aria-label="Mostrar confirmação">
+              <svg class="eye-icon" id="eye-confirm" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-icon eye-off" id="eye-off-confirm" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-6.4 0-10-7-10-7a18.2 18.2 0 0 1 2.94-3.94M9.88 9.88A3 3 0 0 0 12 15a3 3 0 0 0 2.12-5.12M6.53 6.53C4.12 8.07 2 12 2 12s3.6 7 10 7a10.9 10.9 0 0 0 5.47-1.53M22 22 2 2"/></svg>
+            </button>
+          </div>
+          <p class="error" id="confirm-error" hidden></p>
+        </div>
+
+        <div class="alert alert--negative" id="form-error" role="alert" hidden></div>
+
+        <button class="btn btn--primary btn--block" type="submit" id="submit">
+          <span class="btn-label">Salvar nova senha</span>
+        </button>
+      </form>
+
+      <!-- Estado 4: senha redefinida -->
+      <div class="state" id="state-success" hidden>
+        <div class="icon-badge icon-badge--positive" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </div>
+        <h1 class="title">Senha atualizada</h1>
+        <p class="text">Sua senha foi redefinida. Agora você já pode entrar no RideCheck com a nova senha.</p>
+      </div>
+
+    </section>
+
+    <p class="footer">Você recebeu este link porque pediu para redefinir a senha da sua conta RideCheck.</p>
+
+  </main>
+
+  <script src="redefinir-senha.js"></script>
 </body>
 </html>
