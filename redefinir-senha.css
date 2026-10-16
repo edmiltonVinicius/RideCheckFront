@@ -1,0 +1,360 @@
+/* Página de redefinição de senha do RideCheck.
+   Tokens do design system (token_mapping_compose.md), em CSS custom properties.
+   Claro por padrão; escuro segue a preferência do sistema. */
+
+:root {
+  --surface: #F6FAF8;
+  --surface-raised: #FFFFFF;
+  --surface-sunken: #EBF2EE;
+  --line: #C8D9CF;
+  --ink: #111D16;
+  --ink-muted: #536B5E;
+  --ink-faint: #7E9A8B;
+  --brand: #0A8F5E;
+  --brand-hover: #077A4F;
+  --brand-subtle: #E0F5EC;
+  --brand-on: #FFFFFF;
+  --positive: #0A8F5E;
+  --positive-subtle: #E0F5EC;
+  --caution: #946B00;
+  --caution-subtle: #FEF5DC;
+  --negative: #BF2E2E;
+  --negative-subtle: #FDECEC;
+  --shadow: 0 1px 2px rgba(17, 29, 22, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface: #0C1510;
+    --surface-raised: #162119;
+    --surface-sunken: #091009;
+    --line: #2A3D32;
+    --ink: #E4EDE8;
+    --ink-muted: #8CA698;
+    --ink-faint: #5E7A6B;
+    --brand: #2DD497;
+    --brand-hover: #5AE0AF;
+    --brand-subtle: #0F2A1E;
+    --brand-on: #0C1510;
+    --positive: #2DD497;
+    --positive-subtle: #0F2A1E;
+    --caution: #F5C542;
+    --caution-subtle: #2A2108;
+    --negative: #F27171;
+    --negative-subtle: #2D1414;
+    --shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: 'Plus Jakarta Sans', Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  gap: 24px;
+}
+
+/* Marca */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.wordmark {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.wordmark-accent { color: var(--brand); }
+
+/* Cartão */
+.card {
+  width: 100%;
+  max-width: 450px;
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 28px 24px;
+  box-shadow: var(--shadow);
+}
+
+.state {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.text {
+  margin: 0;
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--ink-muted);
+}
+
+/* Ícones de estado */
+.icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-badge--positive { background: var(--positive-subtle); color: var(--positive); }
+.icon-badge--negative { background: var(--negative-subtle); color: var(--negative); }
+
+/* Carregando */
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--line);
+  border-top-color: var(--brand);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  align-self: flex-start;
+  margin: auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation-duration: 2.4s; }
+}
+
+/* Campos */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-muted);
+}
+.input-wrap {
+  position: relative;
+}
+.input {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.input::placeholder { color: var(--ink-faint); }
+.input:focus-visible {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-subtle);
+}
+.input[aria-invalid="true"] {
+  border-color: var(--negative);
+}
+.input { padding-right: 48px; }
+
+.toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink-faint);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease;
+}
+.toggle:hover { color: var(--brand); }
+.toggle:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* Barra de força */
+.strength-bar {
+  display: flex;
+  gap: 6px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.strength-seg {
+  flex: 1;
+  height: 3px;
+  border-radius: 99px;
+  background: var(--line);
+  transition: background-color 0.25s ease;
+}
+.strength-seg.active { background: var(--brand); }
+
+/* Lista de requisitos */
+.req-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+.req-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  transition: color 0.2s ease;
+  margin-bottom: 1px;
+}
+.req-item[data-met="true"] { color: var(--positive); }
+
+.req-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink-faint);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.req-item[data-met="true"] .req-icon {
+  border-color: var(--positive);
+  background: var(--positive);
+}
+.req-item[data-met="true"] .req-icon::after {
+  content: '';
+  display: block;
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid var(--brand-on);
+  border-bottom: 2px solid var(--brand-on);
+  transform: rotate(-45deg) translateY(-1px);
+}
+
+.error {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--negative);
+}
+
+/* Alertas */
+.alert {
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 21px;
+}
+.alert--negative {
+  background: var(--negative-subtle);
+  color: var(--negative);
+}
+
+/* Botões */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.btn--primary {
+  background: var(--brand);
+  color: var(--brand-on);
+}
+.btn--primary:hover { background: var(--brand-hover); }
+.btn--ghost {
+  background: var(--surface-raised);
+  border-color: var(--line);
+  color: var(--ink);
+  font-weight: 500;
+}
+.btn--ghost:hover { border-color: var(--ink-faint); }
+.btn--block { width: 100%; }
+
+.btn:focus-visible {
+  outline: 3px solid var(--brand-subtle);
+  outline-offset: 2px;
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* Botão de envio com indicador de carregamento */
+.btn-label { display: inline-block; }
+.btn.is-loading .btn-label::after {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: 10px;
+  vertical-align: -2px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.footer {
+  margin: 0;
+  max-width: 400px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--ink-faint);
+}
+
+/* Telas pequenas: o cartão ocupa a largura toda com a margem lateral de 24px */
+@media (max-width: 420px) {
+  .shell { padding: 32px 24px; }
+  .card { padding: 24px 20px; }
+}
